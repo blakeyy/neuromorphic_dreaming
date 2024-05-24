@@ -61,4 +61,4 @@ This code is released under the Creative Commons Attribution-NonCommercial-Share
 
 ## Acknowledgements
 
-This work reuses parts from [this code](https://github.com/cristianocapone/biodreaming). The implementation leverages the DYNAP-SE neuromorphic chip and the [`samna`](https://synsense-sys-int.gitlab.io/samna/) library for interfacing with the hardware. In addition we use the [`gymnasium`](https://gymnasium.farama.org/index.html) library to run the reinforcement learning task (Atari Pong).
+This work reuses parts from [this code](https://github.com/cristianocapone/biodreaming) of the paper "Towards biologically plausible Dreaming and Planning in recurrent spiking networks" by Capone et al. The implementation leverages the DYNAP-SE neuromorphic chip and the [`samna`](https://synsense-sys-int.gitlab.io/samna/) library for interfacing with the hardware. In addition we use the [`gymnasium`](https://gymnasium.farama.org/index.html) library to run the reinforcement learning task (Atari Pong).
