@@ -64,7 +64,7 @@ The `compare_results.py` script plots average returns from `.npy` files stored i
 
 ## License
 
-This code is released under the CC BY-NC-SA 4.0 license. See the LICENSE file for details. Commercial use requires permission from the authors.
+This code is released under the MIT license. See the [LICENSE](LICENSE) file for details. Commercial use requires permission from the authors.
 
 ## Citation
 
