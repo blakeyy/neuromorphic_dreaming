@@ -74,13 +74,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If you use this code or find our work relevant, please cite:
 
 ```bibtex
-@misc{blakowski2024neuromorphic,
-      title={Neuromorphic Dreaming: A Pathway to Efficient Learning in Artificial Agents},
+@misc{blakowski2024neuromorphicdreamingpathwayefficient,
+      title={Neuromorphic dreaming: A pathway to efficient learning in artificial agents}, 
       author={Ingo Blakowski and Dmitrii Zendrikov and Cristiano Capone and Giacomo Indiveri},
       year={2024},
       eprint={2405.15616},
       archivePrefix={arXiv},
-      primaryClass={cs.NE}
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2405.15616}, 
 }
 ```
 

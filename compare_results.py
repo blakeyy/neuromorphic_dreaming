@@ -22,7 +22,7 @@ font_tickle = 7
 font_legend = 7
 
 final_rew = []
-final_rew_sem = []
+final_rew_sd = []
 
 for count, (if_dream, n_pred_steps) in enumerate(zip(dream_vals, step_vals)):
     print(n_pred_steps)
@@ -34,15 +34,16 @@ for count, (if_dream, n_pred_steps) in enumerate(zip(dream_vals, step_vals)):
         REWARDS.append(savgol_filter(reward[:stop//50 - 1], 9, 3))
 
     mean_reward = np.mean(np.array(REWARDS), axis=0)
-    sem = np.std(np.array(REWARDS), axis=0) / np.sqrt(n_rep[count])
+    #sd = np.std(np.array(REWARDS), axis=0) / np.sqrt(n_rep[count])
+    sd = np.std(np.array(REWARDS), axis=0) # sd
 
     final_rew.append(mean_reward[-1])
-    final_rew_sem.append(sem[-1])
+    final_rew_sd.append(sd[-1])
 
     print(final_rew)
 
     # Plot mean and standard deviation
-    ax.fill_between(np.arange(start=50, stop=stop, step=50), mean_reward+sem, mean_reward-sem, color=colors[count], alpha=0.3)
+    ax.fill_between(np.arange(start=50, stop=stop, step=50), mean_reward+sd, mean_reward-sd, color=colors[count], alpha=0.3)
     ax.plot(np.arange(start=50, stop=stop, step=50), mean_reward, linestyle='dashed', linewidth=2.0, color=colors[count], label=labels[count])
 
     # Plot 80th percentile
