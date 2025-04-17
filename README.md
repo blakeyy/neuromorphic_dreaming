@@ -1,6 +1,6 @@
-# Neuromorphic Dreaming as a Pathway to Efficient Learning in Artificial Agents
+# Neuromorphic Dreaming: A Pathway to Efficient Learning in Artificial Agents
 
-This repository contains the Python code for the paper "Neuromorphic Dreaming as a Pathway to Efficient Learning in Artificial Agents". It implements a model-based reinforcement learning (MBRL) approach using spiking neural networks (SNNs) running directly on the DYNAP-SE mixed-signal neuromorphic processor to learn the Atari Pong game.
+This repository contains the Python code for the paper "Neuromorphic Dreaming: A Pathway to Efficient Learning in Artificial Agents" ([arXiv:2405.15616](https://arxiv.org/abs/2405.15616)). It implements a model-based reinforcement learning (MBRL) approach using spiking neural networks (SNNs) running directly on the DYNAP-SE mixed-signal neuromorphic processor to learn the Atari Pong game.
 
 ## Overview
 
@@ -11,65 +11,78 @@ The project demonstrates how biologically inspired "dreaming" (offline learning 
 
 Both the agent and world model SNNs leverage the analog neuron and synapse dynamics of the DYNAP-SE chip for computation, with only the final readout layers trained on a host computer.
 
-## Hardware Requirement
+## System Requirements
 
-Direct execution of the training code requires access to **DYNAP-SE neuromorphic hardware** and the associated `samna` software library. The core SNN dynamics are simulated on the chip in real-time.
+*   **Hardware:** Access to **DYNAP-SE neuromorphic hardware** is required for execution.
+*   **Operating System:** Tested primarily on **Ubuntu 16.04 LTS**. Compatibility with other operating systems is not guaranteed due to potential hardware driver and `samna` library dependencies.
+*   **Python:** Tested with Python 3.x.
 
 ## Dependencies
 
 *   Python (tested with 3.x)
-*   `samna`: Library for interfacing with DYNAP-SE. Follow SynSense [installation instructions](https://synsense-sys-int.gitlab.io/samna/0.45.3/index.html#).
-*   `numpy`: For numerical operations.
-*   `matplotlib`: For plotting results.
-*   `gymnasium`: For the Atari Pong environment. (Requires Atari ROMs installation: `pip install gymnasium[atari] gymnasium[accept-rom-license]`)
-*   `tqdm`: For progress bars.
+*   `samna==0.17`: Library for interfacing with DYNAP-SE.
+*   `numpy`
+*   `matplotlib`
+*   `gymnasium` (with Atari support)
+*   `tqdm`
 
-It is recommended to use a virtual environment. You can typically install Python dependencies via pip:
-`pip install numpy matplotlib gymnasium[atari] tqdm`
-*(Ensure `samna` is installed separately according to hardware provider instructions)*
+It is recommended to use a Python virtual environment. You can typically install standard Python dependencies via pip (installation time: typically < 5 minutes):
+`pip install numpy matplotlib gymnasium[atari] gymnasium[accept-rom-license] tqdm`
 
 ## Files
 
-*   `agent.py`: Main `PongAgent` class implementing the SNN agent and world model logic, learning rules, and DYNAP-SE interaction.
+*   `agent.py`: Main `PongAgent` class implementing the SNN agent/model logic, learning rules, DYNAP-SE interaction.
 *   `optimizer.py`: Adam optimizer implementation.
-*   `params.py`: Parameter settings for networks (editable via `config.ini`).
-*   `functions.py`: Utility functions for plotting results (rewards, policies, spikes).
-*   `train.ipynb`: Jupyter Notebook providing a step-by-step guide to connect to the hardware, configure the agent, and run the training loop (both awake and dreaming phases).
-*   `config.ini`: Configuration file for network parameters, learning rates, etc.
-*   `results/`: Contains example reward data (`.npy` files) from training runs.
-*   `compare_results.py`: Script to generate comparison plots (like Fig 1a in the main paper) from data in the `results` folder.
+*   `params.py`: Network parameter settings (loaded from `config.ini`).
+*   `functions.py`: Utility functions for plotting results.
+*   `train.ipynb`: Jupyter Notebook for hardware connection, agent configuration, and running the training loop.
+*   `config.ini`: Configuration file (learning rates, neuron counts, etc.).
+*   `results/`: Example reward data (`.npy` files) from training runs.
+*   `compare_results.py`: Script to generate comparison plots (like Fig 1a) from data in `results/`.
+*   `LICENSE`: MIT License file.
 *   `README.md`: This file.
 
 ## Running the Training
 
 1.  Ensure DYNAP-SE hardware is connected and `samna` library is functional.
-2.  Install other Python dependencies.
-3.  Open and run the cells in `train.ipynb`. This will guide you through:
-    *   Connecting to the DYNAP-SE board.
-    *   Creating and configuring the `PongAgent` (specify `if_dream=True` or `False`).
-    *   Executing the training loop.
-4.  Training progress (rewards, weights) will be saved to a new directory.
+2.  Set up your Python environment and install dependencies.
+3.  Open and run the cells sequentially in `train.ipynb`.
+    *   Connect to the DYNAP-SE board.
+    *   Create and configure the `PongAgent` (set `if_dream=True` or `False`).
+    *   Execute the training loop.
+4.  Outputs (rewards, weights) are saved to a new directory.
 5.  Use `functions.py` or `compare_results.py` to visualize results.
+
+**Expected Demo Runtime:** Running the initial setup cells in `train.ipynb` and completing a full 2000-game training run on our test setup (Intel i7-6700K CPU host) took approximately 1 hour when training without dreaming, and approximately 3 hours when training with the dreaming phase included (100 awake + 50 dreaming frames per game).
 
 ## Configuration
 
-Adjust parameters like neuron counts, learning rates, and training phases in `config.ini`. Note that major changes to network size may require more complex code modifications due to DYNAP-SE hardware constraints (e.g., fan-in limits, core sizes).
+Adjust parameters in `config.ini`. Note: Significant changes to network size might require code modifications due to DYNAP-SE hardware constraints (fan-in, core size).
 
 ## Generating Comparison Plots
 
-The `compare_results.py` script plots average returns from `.npy` files stored in the `results` folder.
-1.  Ensure `.npy` files (e.g., `rewards_{repetition}if_dream_{True/False}.npy`) are in the `results` folder.
-2.  Run `python compare_results.py`.
-3.  A plot (`comparison_10.pdf`) will be saved in the `results` folder.
+1.  Place result `.npy` files (format: `rewards_{repetition}if_dream_{True/False}.npy`) in the `results/` folder.
+2.  Run: `python compare_results.py`.
+3.  Output plot `comparison_10.pdf` saved in `results/`.
 
 ## License
 
-This code is released under the MIT license. See the [LICENSE](LICENSE) file for details. Commercial use requires permission from the authors.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Citation
 
-If you use this code or find our work relevant, please cite the associated paper:
-*[[arxiv](https://arxiv.org/abs/2405.15616)]*
+If you use this code or find our work relevant, please cite:
+
+```bibtex
+@misc{blakowski2024neuromorphic,
+      title={Neuromorphic Dreaming: A Pathway to Efficient Learning in Artificial Agents},
+      author={Ingo Blakowski and Dmitrii Zendrikov and Cristiano Capone and Giacomo Indiveri},
+      year={2024},
+      eprint={2405.15616},
+      archivePrefix={arXiv},
+      primaryClass={cs.NE}
+}
+```
 
 ## Acknowledgements
 
