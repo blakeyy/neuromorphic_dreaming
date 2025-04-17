@@ -9,61 +9,67 @@ The project demonstrates how biologically inspired "dreaming" (offline learning 
 1.  **Awake Phase:** The SNN agent interacts with the real Pong environment (via OpenAI Gym), learning from actual rewards using a policy gradient rule. The world model SNN learns to predict environment transitions.
 2.  **Dreaming Phase:** The agent interacts with the learned world model SNN, generating simulated experiences and further refining its policy based on predicted rewards.
 
-Both the agent and world model SNNs leverage the analog neuron and synapse dynamics of the DYNAP-SE chip for computation, with only the final readout layers trained on a host computer.
+Both the agent and world model SNNs leverage the analog neuron and synapse dynamics of the DYNAP-SE chip for computation, with only the final readout layers trained on a host computer. The primary performance comparison is visualized in `results/comparison_10.pdf`.
 
 ## System Requirements
 
 *   **Hardware:** Access to **DYNAP-SE neuromorphic hardware** is required for execution.
 *   **Operating System:** Tested primarily on **Ubuntu 16.04 LTS**. Compatibility with other operating systems is not guaranteed due to potential hardware driver and `samna` library dependencies.
-*   **Python:** Tested with Python 3.x.
+*   **Python:** Tested with Python 3.x (specifically 3.8+ for `scipy.stats`).
 
 ## Dependencies
 
-*   Python (tested with 3.x)
 *   `samna==0.17`: Library for interfacing with DYNAP-SE.
 *   `numpy`
 *   `matplotlib`
+*   `scipy` (for statistical analysis script)
 *   `gymnasium` (with Atari support)
 *   `tqdm`
 
 It is recommended to use a Python virtual environment. You can typically install standard Python dependencies via pip (installation time: typically < 5 minutes):
-`pip install numpy matplotlib gymnasium[atari] gymnasium[accept-rom-license] tqdm`
+`pip install numpy matplotlib scipy gymnasium[atari] gymnasium[accept-rom-license] tqdm`
+
 
 ## Files
 
 *   `agent.py`: Main `PongAgent` class implementing the SNN agent/model logic, learning rules, DYNAP-SE interaction.
 *   `optimizer.py`: Adam optimizer implementation.
 *   `params.py`: Network parameter settings (loaded from `config.ini`).
-*   `functions.py`: Utility functions for plotting results.
+*   `functions.py`: Utility functions for plotting detailed results (rewards, policies, spikes).
 *   `train.ipynb`: Jupyter Notebook for hardware connection, agent configuration, and running the training loop.
 *   `config.ini`: Configuration file (learning rates, neuron counts, etc.).
-*   `results/`: Example reward data (`.npy` files) from training runs.
-*   `compare_results.py`: Script to generate comparison plots (like Fig 1a) from data in `results/`.
+*   `results/`: Contains averaged reward data (`.npy` files) from training runs. **Also contains the main comparison plot `comparison_10.pdf`.**
+*   `compare_results.py`: Script to **generate** the main comparison plot (`results/comparison_10.pdf`, similar to Fig 1a in the paper) from data in `results/`.
+*   `calculate_stats.py`: Script to perform the **Mann-Whitney U statistical test** comparing final performance between dreaming and no-dreaming runs, using data in `results/`.
 *   `LICENSE`: MIT License file.
 *   `README.md`: This file.
 
 ## Running the Training
 
 1.  Ensure DYNAP-SE hardware is connected and `samna` library is functional.
-2.  Set up your Python environment and install dependencies.
+2.  Set up your Python environment and install dependencies (including `scipy`).
 3.  Open and run the cells sequentially in `train.ipynb`.
     *   Connect to the DYNAP-SE board.
     *   Create and configure the `PongAgent` (set `if_dream=True` or `False`).
     *   Execute the training loop.
-4.  Outputs (rewards, weights) are saved to a new directory.
-5.  Use `functions.py` or `compare_results.py` to visualize results.
+4.  Outputs (averaged rewards, weights) are saved to a new directory (or potentially overwrite files in `results/` depending on your notebook implementation).
+5.  Use `functions.py` for detailed plots, or `compare_results.py` / `calculate_stats.py` for summary analysis.
 
-**Expected Demo Runtime:** Running the initial setup cells in `train.ipynb` and completing a full 2000-game training run on our test setup (Intel i7-6700K CPU host) took approximately 1 hour when training without dreaming, and approximately 3 hours when training with the dreaming phase included (100 awake + 50 dreaming frames per game).
+**Expected Runtime:** Running the initial setup cells in `train.ipynb` and completing a full 2000-game training run on our test setup (Intel i7-6700K CPU host) took approximately **1 hour** when training *without* dreaming, and approximately **3 hours** when training *with* the dreaming phase included (100 awake + 50 dreaming frames per game).
 
 ## Configuration
 
 Adjust parameters in `config.ini`. Note: Significant changes to network size might require code modifications due to DYNAP-SE hardware constraints (fan-in, core size).
 
-## Generating Comparison Plots
+## Generating Comparison Plots & Statistics
 
-1.  Place result `.npy` files (format: `rewards_{repetition}if_dream_{True/False}.npy`) in the `results/` folder.
-2.  Run: `python compare_results.py`.
-3.  Output plot `comparison_10.pdf` saved in `results/`.
+1.  Ensure result `.npy` files (format: `rewards_{repetition}if_dream_{True/False}.npy`) are in the `results/` folder.
+2.  To generate the main performance plot (Mean±SD, 80th percentile):
+    `python compare_results.py`
+    *(Output: `results/comparison_10.pdf`)*
+3.  To calculate descriptive statistics and perform the Mann-Whitney U test on final performance:
+    `python calculate_stats.py`
+    *(Output: Printed statistics including Mean, SD, U-statistic, p-value)*
 
 ## License
 
@@ -75,13 +81,13 @@ If you use this code or find our work relevant, please cite:
 
 ```bibtex
 @misc{blakowski2024neuromorphicdreamingpathwayefficient,
-      title={Neuromorphic dreaming: A pathway to efficient learning in artificial agents}, 
+      title={Neuromorphic dreaming: A pathway to efficient learning in artificial agents},
       author={Ingo Blakowski and Dmitrii Zendrikov and Cristiano Capone and Giacomo Indiveri},
       year={2024},
       eprint={2405.15616},
       archivePrefix={arXiv},
       primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2405.15616}, 
+      url={https://arxiv.org/abs/2405.15616},
 }
 ```
 
