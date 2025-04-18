@@ -10,7 +10,9 @@ The project demonstrates how biologically inspired "dreaming" (offline learning 
 2.  **Dreaming Phase:** The agent interacts with the learned world model SNN, generating simulated experiences and further refining its policy based on predicted rewards.
 
 Both the agent and world model SNNs leverage the analog neuron and synapse dynamics of the DYNAP-SE chip for computation, with only the final readout layers trained on a host computer. The primary performance comparison is visualized in `results/comparison_10.png`.
+
 ![Comparison](results/comparison_10.png)
+
 ## System Requirements
 
 *   **Hardware:** Access to **DYNAP-SE neuromorphic hardware** is required for execution.
