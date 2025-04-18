@@ -9,8 +9,8 @@ The project demonstrates how biologically inspired "dreaming" (offline learning 
 1.  **Awake Phase:** The SNN agent interacts with the real Pong environment (via OpenAI Gym), learning from actual rewards using a policy gradient rule. The world model SNN learns to predict environment transitions.
 2.  **Dreaming Phase:** The agent interacts with the learned world model SNN, generating simulated experiences and further refining its policy based on predicted rewards.
 
-Both the agent and world model SNNs leverage the analog neuron and synapse dynamics of the DYNAP-SE chip for computation, with only the final readout layers trained on a host computer. The primary performance comparison is visualized in `results/comparison_10.pdf`.
-
+Both the agent and world model SNNs leverage the analog neuron and synapse dynamics of the DYNAP-SE chip for computation, with only the final readout layers trained on a host computer. The primary performance comparison is visualized in `results/comparison_10.png`.
+![Comparison](results/comparison_10.png)
 ## System Requirements
 
 *   **Hardware:** Access to **DYNAP-SE neuromorphic hardware** is required for execution.
@@ -56,6 +56,20 @@ It is recommended to use a Python virtual environment. You can typically install
 5.  Use `functions.py` for detailed plots, or `compare_results.py` / `calculate_stats.py` for summary analysis.
 
 **Expected Runtime:** Running the initial setup cells in `train.ipynb` and completing a full 2000-game training run on our test setup (Intel i7-6700K CPU host) took approximately **1 hour** when training *without* dreaming, and approximately **3 hours** when training *with* the dreaming phase included (100 awake + 50 dreaming frames per game).
+
+## Demo Videos
+
+Short previews showing the agent's behavior at the start and end of training. Click the links below the previews for the full videos.
+
+**Start of Training (Random Policy):**
+
+![Agent performance preview at start of training](media/start_training_preview.gif)
+*([Link to full start_training.mp4 video](media/start_training.mp4))*
+
+**End of Training (Learned Policy):**
+
+![Agent performance preview at end of training](media/end_training_preview.gif)
+*([Link to full end_training.mp4 video](media/end_training.mp4))*
 
 ## Configuration
 
